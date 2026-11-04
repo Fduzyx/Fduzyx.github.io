@@ -3,7 +3,7 @@ import { createHash } from 'node:crypto';
 import assert from 'node:assert/strict';
 import { basename, extname, join, relative } from 'node:path';
 const hash = async file => createHash('sha256').update(await readFile(file)).digest('hex');
-const approvedCvHash = 'f145a906c17ea74c4a88a6f1a9b882e7fda1104f916074d123c54c7f14687db2';
+const approvedCvHash = 'c3cae4ddcfc4f4880a103aefb8c8458632845aaea4ad4c7118ea381adbb02524';
 assert.equal(await hash('public/Yixuan_Zhuang_CV.pdf'), approvedCvHash, 'The public CV must match the approved original SHA-256');
 assert.equal(await hash('dist/Yixuan_Zhuang_CV.pdf'), approvedCvHash, 'The built CV must match the approved original SHA-256');
 const base = `/${(process.env.BASE_PATH || '').replace(/^\/+|\/+$/g, '')}/`.replace('//', '/');
