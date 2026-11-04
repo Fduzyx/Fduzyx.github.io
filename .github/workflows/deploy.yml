@@ -1,0 +1,42 @@
+name: Deploy to GitHub Pages (manual)
+
+# Preparing this file does not publish anything. Run only after the owner has
+# reviewed the local site and explicitly authorized remote publication.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      SITE_URL: https://yixuanzhuang.com
+      BASE_PATH: /
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7
+      - name: Install, check, build, and upload the static site
+        uses: withastro/action@v6
+        with:
+          node-version: '24.15.0'
+          build-cmd: npm run check && npm run build && npm run verify:build
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy the checked build to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

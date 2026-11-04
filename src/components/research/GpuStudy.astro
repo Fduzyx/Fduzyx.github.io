@@ -1,0 +1,51 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import ChapterText from './ChapterText.astro';
+interface Props { project: CollectionEntry<'research'> }
+const { project } = Astro.props;
+const section = (id: string) => project.data.sections.find(s => s.id === id)!;
+const callbackExcerpt = `void notify(
+    const l2_cache_access_event
+        &event
+) const noexcept {
+    callback_(context_, event);
+}`;
+---
+<div class="case-container">
+  <section class="chapter chapter-split" aria-labelledby="contribution">
+    <ChapterText section={section('contribution')} number="01" />
+    <aside class="callback-example">
+      <p class="eyebrow">l2-cache-observer.h</p>
+      <pre aria-label="Observer notification method"><code>{callbackExcerpt}</code></pre>
+      <p>Dispatch is synchronous. The caller owns the callback context and registers it for one simulator instance.</p>
+      <a href="https://github.com/accel-sim/gpgpu-sim_distribution/blob/2beb8a461c50918caa2475b9c2075a1a73ec8934/src/gpgpu-sim/l2-cache-observer.h#L55-L57">Read the source · BSD-3-Clause ↗</a>
+    </aside>
+  </section>
+</div>
+<section class="case-dark gpu-method" aria-labelledby="method"><div class="case-container">
+  <div class="chapter chapter-split"><ChapterText section={section('method')} number="02" /><div class="code-signature"><span class="code-file">gpu-cache.cc</span><code>data_cache::access</code><p>Read the event at the point where the simulator accounts for the access.</p></div></div>
+  <figure class="event-diagram">
+    <div class="event-main"><div><span>Entry</span><code>data_cache::access</code></div><span class="event-arrow" aria-hidden="true">↓</span><div><span>Native accounting</span><strong>Update cache statistics</strong></div><span class="event-arrow" aria-hidden="true">↓</span><div class="event-emphasis"><span>Accepted L2 access</span><code>l2_cache_access_event</code></div><span class="event-arrow" aria-hidden="true">↓</span><div><span>Observer dispatch</span><code>l2_cache_events.notify(event)</code></div></div>
+    <aside class="event-detail"><p class="eyebrow">Statistics categories</p><ul><li><code>HIT</code><span>Cache hit</span></li><li><code>HIT_RESERVED</code><span>Pending hit</span></li><li><code>MISS</code><span>Cache miss</span></li><li><code>SECTOR_MISS</code><span>Sector miss</span></li></ul><p>Event categories follow the simulator’s native statistics mapping, including pending hits and sector misses.</p></aside>
+    <figcaption>With an observer registered, accepted L2 accesses produce events after native accounting.{' '}<a href="https://github.com/accel-sim/gpgpu-sim_distribution/blob/2beb8a461c50918caa2475b9c2075a1a73ec8934/doc/l2-cache-observer.md">Read the interface documentation ↗</a></figcaption>
+  </figure>
+</div></section>
+<div class="case-container">
+  <section class="chapter gpu-validation" aria-labelledby="validation">
+    <ChapterText section={section('validation')} number="03" />
+    <div class="replay-comparison">
+      <table class="replay-table">
+        <caption>Rodinia backprop 4096 · both kernels</caption>
+        <thead><tr><th scope="col">Configuration</th><th scope="col">Simulated cycles</th><th scope="col">Simulated instructions</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Baseline<span>Unmodified dev</span></th><td>14,731</td><td>10,473,824</td></tr>
+          <tr><th scope="row">Candidate<span>Observer unregistered</span></th><td>14,731</td><td>10,473,824</td></tr>
+          <tr><th scope="row">Candidate<span>Observer registered</span></th><td>14,731</td><td>10,473,824</td></tr>
+        </tbody>
+      </table>
+      <p class="replay-conclusion"><strong>All 7,000 normalized output lines matched across the three runs.</strong> The registered observer recorded 61,275 events, matching the native accepted-access count in every status bucket.</p>
+      <p class="replay-source">The comparison excludes build banners, wall-clock and rate lines, and the observer summary. <a href="https://github.com/accel-sim/gpgpu-sim_distribution/pull/151">Trace-replay validation in PR #151 ↗</a></p>
+    </div>
+  </section>
+  <section class="chapter chapter-split case-outcome" aria-labelledby="outcome"><ChapterText section={section('outcome')} number="04" /><a class="repository-link" href="https://github.com/accel-sim/gpgpu-sim_distribution/pull/151"><span class="eyebrow">Open-source contribution</span><strong>L2 cache observer</strong><span>Accel-Sim / GPGPU-Sim</span><span class="repository-status">{project.data.status} <span aria-hidden="true">↗</span></span></a></section>
+</div>

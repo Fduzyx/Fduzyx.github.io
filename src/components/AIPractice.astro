@@ -1,0 +1,39 @@
+---
+import { profile } from '../data/profile';
+const { aiPractice } = profile;
+---
+<section class="ai-practice" aria-labelledby="ai-practice-title">
+  <h3 class="eyebrow" id="ai-practice-title">Working with AI</h3>
+  <p class="ai-practice-copy">{aiPractice.description}</p>
+  <dl class="ai-practice-stats">
+    {aiPractice.stats.map(stat => (
+      <div>
+        <dt>{stat.label}</dt>
+        <dd>{stat.value}<span class="sr-only">{stat.expansion}</span></dd>
+      </div>
+    ))}
+  </dl>
+  <div class="ai-practice-meta">
+    <a class="text-link" href={aiPractice.url} target="_blank" rel="noopener noreferrer">
+      View my Codex activity <span aria-hidden="true">↗</span>
+      <span class="sr-only"> (opens in a new tab)</span>
+    </a>
+    <p>Profile snapshot · <time datetime={aiPractice.snapshotDate}>{aiPractice.snapshotLabel}</time></p>
+  </div>
+</section>
+
+<style>
+  .ai-practice { margin-top: 36px; padding-top: 25px; border-top: 1px solid var(--line); }
+  .ai-practice .eyebrow { font-size: 12px; letter-spacing: 1.6px; }
+  .ai-practice-copy { margin-top: 10px; font-size: 15px; line-height: 1.75; color: #45525b; }
+  .ai-practice-stats { display: flex; flex-wrap: wrap; gap: 20px 38px; margin: 21px 0 12px; }
+  .ai-practice-stats > div { display: flex; flex-direction: column; gap: 3px; }
+  .ai-practice-stats dt { order: 1; color: var(--muted); font-size: 12px; line-height: 1.6; }
+  .ai-practice-stats dd { margin: 0; font: 30px/1.1 var(--serif); letter-spacing: -.4px; }
+  .ai-practice-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 26px; }
+  .ai-practice-meta .text-link { min-height: 44px; padding-block: 9px; margin: 0; gap: 10px; }
+  .ai-practice-meta p { color: var(--muted); font-size: 12px; line-height: 1.7; }
+  @media (max-width: 400px) {
+    .ai-practice-stats { column-gap: 26px; }
+  }
+</style>

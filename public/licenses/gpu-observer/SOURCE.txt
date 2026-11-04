@@ -1,0 +1,24 @@
+GPU L2 observer source attribution, 2026-11-04
+
+Repository: accel-sim/gpgpu-sim_distribution
+Pull request: https://github.com/accel-sim/gpgpu-sim_distribution/pull/151
+Pinned source commit: 2beb8a461c50918caa2475b9c2075a1a73ec8934
+
+Source files:
+https://github.com/accel-sim/gpgpu-sim_distribution/blob/2beb8a461c50918caa2475b9c2075a1a73ec8934/src/gpgpu-sim/gpu-cache.cc
+https://github.com/accel-sim/gpgpu-sim_distribution/blob/2beb8a461c50918caa2475b9c2075a1a73ec8934/src/gpgpu-sim/l2-cache-observer.h
+https://github.com/accel-sim/gpgpu-sim_distribution/blob/2beb8a461c50918caa2475b9c2075a1a73ec8934/doc/l2-cache-observer.md
+
+The website's HTML event-flow illustration was independently authored from
+the source's event semantics. The cache access path appears at lines 2006-2040
+of the pinned gpu-cache.cc. Accepted L2 accesses update native statistics,
+construct an event using the same selected statistics status, and notify the
+registered callback.
+
+gpu-cache-BSD-3-Clause.txt preserves the complete copyright and license header
+of gpu-cache.cc. COPYRIGHT.txt preserves the repository's root notice.
+l2-cache-observer.h declares SPDX-License-Identifier: BSD-3-Clause.
+
+The displayed notify method is reproduced from l2-cache-observer.h,
+lines 55-57 of the pinned commit. Line breaks were adjusted for the website;
+the code is otherwise unchanged.

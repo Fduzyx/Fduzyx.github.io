@@ -1,0 +1,59 @@
+Website asset reuse, 2026-11-03; expanded 2026-11-04
+
+Source: Model2GDS, IEEE SSCS Code-a-Chip official repository
+Commit: b55af6eeb409208bde8538a345e77af40c1342cc
+Source directory: ISSCC27/submitted_notebooks/Model2GDS/
+Copyright 2026 Model2GDS contributors.
+
+UNMODIFIED PROJECT FIGURES
+
+public/images/research/evidence/model2gds-cycle-agreement.png
+  Source: figures/final/cycle_agreement.png
+public/images/research/evidence/model2gds-functional-coverage.png
+  Source: figures/final/functional_coverage.png
+public/images/research/evidence/model2gds-token-wavefront.png
+  Source: figures/final/token_wavefront.png
+public/images/research/evidence/model2gds-routing-2x2-original.png
+  Source: supplement/physical20/layouts/cfg_2x2.png
+public/images/research/evidence/model2gds-routing-4x4-original.png
+  Source: supplement/physical20/layouts/cfg_4x4.png
+
+All five files above are unchanged byte copies of their corresponding source.
+
+MODIFIED PRESENTATION ASSETS
+
+public/images/research/model2gds.webp
+  Source: supplement/physical20/layouts/cfg_4x4.png
+  Central-detail cover crop, pixel box (1645, 290, 2525, 785),
+  encoded as WebP at quality 92.
+public/images/research/evidence/model2gds-routing-2x2.webp
+  Source: supplement/physical20/layouts/cfg_2x2.png
+  Routing-overview crop, pixel box (303, 276, 1172, 1170),
+  encoded as lossless WebP, 869 x 894 pixels.
+public/images/research/evidence/model2gds-routing-4x4.webp
+  Source: supplement/physical20/layouts/cfg_4x4.png
+  Routing-overview crop, pixel box (297, 276, 1177, 1170),
+  encoded as lossless WebP, 880 x 894 pixels.
+public/images/research/evidence/model2gds-token-neighbors.png
+  Source: figures/final/token_wavefront.png
+  Complete registered-neighbor-links panel, pixel box (24, 65, 650, 780),
+  lossless PNG, 626 x 715 pixels.
+public/images/research/evidence/model2gds-token-timing.png
+  Source: figures/final/token_wavefront.png
+  Complete aligned-token timing panel, pixel box (725, 65, 2167, 895),
+  lossless PNG, 1442 x 830 pixels.
+
+Pixel boxes use (left, top, right, bottom), with right/bottom exclusive.
+The overview crops preserve original layer colors, geometry, scale bars and
+the dashed detail-window marker. Complete original figures remain available
+through the website's image links. Cropping and encoding are the only changes.
+The two wavefront panels preserve their original panel titles, data, colors,
+labels, arrows, timing cells and axes. Their shared original figure title is
+provided by the page caption. The complete original wavefront PNG is retained.
+
+The implementation metrics table transcribes cell/core areas and the 20 ns
+constraint from supplement/physical20/metrics.json. Figure provenance and
+rendering selection are recorded in the upstream layout_manifest.json.
+
+SKY130 and open_pdks attribution is retained in NOTICE.txt and their separate
+license files alongside the project LICENSE.txt.

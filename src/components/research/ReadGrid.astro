@@ -1,0 +1,25 @@
+---
+import { gridOutcomes } from '../../data/accelerator';
+import { withBase } from '../../lib/paths';
+---
+<figure class="read-grid" aria-labelledby="grid-caption">
+  <div class="grid-chart-heading"><h3>Read-check failures by buffer capacity</h3><span>153 configurations per capacity</span></div>
+  <div class="grid-chart">
+    <div class="grid-ticks" aria-hidden="true">{[153, 102, 51, 0].map(value => <span>{value}</span>)}</div>
+    <div class="grid-chart-area">
+      <div class="grid-lines" aria-hidden="true">{[153, 102, 51, 0].map(() => <i></i>)}</div>
+      <ol class="grid-bars">
+        {gridOutcomes.map(row => <li class:list={{'grid-control': row.control}}>
+          <div class="grid-bar-range">
+            <svg viewBox="0 0 100 153" preserveAspectRatio="none" aria-hidden="true"><rect x="20" y={153 - row.failures} width="60" height={row.failures} /></svg>
+            <span class="grid-count" style={`bottom: calc(${row.failures / 153 * 100}% + 8px)`}>{row.failures}<small> / {row.total}</small></span>
+          </div>
+          <span class="grid-capacity">{row.bufferKiWords}</span><span class="grid-capacity-note">{row.control ? 'control' : 'Ki words'}</span>
+        </li>)}
+      </ol>
+    </div>
+  </div>
+  <figcaption id="grid-caption">Buffer capacity <em>S</em> is measured per operand. Each capacity combines 17 layer shapes, three dataflows, and bandwidths of 1, 4, and 16 words/cycle.
+    <a class="figure-open" href={withBase('images/research/icicm/grid-results-333of459-original.png')} target="_blank" rel="noopener">Original result chart · slide 5 <span aria-hidden="true">↗</span></a>
+  </figcaption>
+</figure>

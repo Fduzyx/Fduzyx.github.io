@@ -1,0 +1,34 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { withBase } from '../lib/paths';
+const model2gds = 'https://github.com/sscs-ose/sscs-ose-code-a-chip.github.io/blob/b55af6eeb409208bde8538a345e77af40c1342cc/ISSCC27/submitted_notebooks/Model2GDS/';
+const observer = 'https://github.com/accel-sim/gpgpu-sim_distribution/blob/2beb8a461c50918caa2475b9c2075a1a73ec8934/';
+---
+<BaseLayout title="Visual credits — Yixuan Zhuang" description="Sources, original research figures, and attribution for the imagery and technical illustrations on this personal academic website.">
+  <Header /><main id="main-content" class="container utility-page"><p class="eyebrow">Sources & attribution</p><h1>Visual credits</h1><div class="project-prose">
+  <h2>Editorial imagery</h2>
+  <p>The wafer hero and the accelerator and GPU cover images are editorial illustrations generated for this website with OpenAI image generation on 3 November 2026.</p>
+
+  <h2>ICICM 2026</h2>
+  <p>The conference photograph shows me in conversation at ICICM 2026 in Xi'an, China. The SCALE-Sim figures and measurements come from my oral presentation, IM-1182, slides 4–7. The observer diagram and configuration-grid chart are adapted for the web, and the two-window table transcribes the original cycle counts. The weight-stationary panels retain their source pixels. Each links to its complete source slide.</p>
+  <p><a href={withBase('licenses/icicm-materials/README.txt')}>Image sources & preparation</a></p>
+
+  <h2>Model2GDS research figures</h2>
+  <p>The verification charts and routing views come from my <a href={`${model2gds}Model2GDS.ipynb`}>Model2GDS notebook and supporting files</a> in the official IEEE SSCS Code-a-Chip repository. The sources are pinned to the merged contribution.</p>
+  <ul>
+    <li><a href={`${model2gds}figures/final/cycle_agreement.png`}>Cycle agreement</a>, <a href={`${model2gds}figures/final/functional_coverage.png`}>verification coverage</a>, and <a href={`${model2gds}figures/final/token_wavefront.png`}>token wavefront</a>: original project figures. On narrow screens, the two token-wavefront panels are shown separately. The <a href={`${model2gds}scripts/reproduce_figures.py`}>plotting script</a> connects the figures to the recorded model and RTL results.</li>
+    <li>2×2 and 4×4 routing views: crops of the original overview panels, retaining the layer colors and scale bars. Open the complete <a href={withBase('images/research/evidence/model2gds-routing-2x2-original.png')}>2×2 figure</a> or <a href={withBase('images/research/evidence/model2gds-routing-4x4-original.png')}>4×4 figure</a> for the overview, central detail, and source metadata.</li>
+    <li>The Model2GDS homepage cover uses a detail crop of the same 4×4 routing figure. The implementation table uses the <a href={`${model2gds}supplement/physical20/metrics.json`}>20 ns study’s recorded metrics</a>.</li>
+  </ul>
+  <p>Copyright 2026 Model2GDS contributors, licensed under Apache-2.0. The composed layouts include SKY130 standard-cell material, with attribution to the SkyWater PDK Authors and open_pdks contributors retained in the project notice.</p>
+  <p><a href={withBase('licenses/model2gds/LICENSE.txt')}>Project license</a> · <a href={withBase('licenses/model2gds/NOTICE.txt')}>Attribution notice</a> · <a href={withBase('licenses/model2gds/sky130_fd_sc_hd-LICENSE.txt')}>SKY130 license</a> · <a href={withBase('licenses/model2gds/open_pdks-LICENSE.txt')}>Open PDKs license</a> · <a href={withBase('licenses/model2gds/WEBSITE-MODIFICATIONS.txt')}>Image modifications</a></p>
+
+  <h2>GPU observer documentation</h2>
+  <p>The event-flow illustration explains the accepted-access path in <a href={`${observer}src/gpgpu-sim/gpu-cache.cc#L2006`}>GPGPU-Sim’s cache implementation</a> and the <a href={`${observer}doc/l2-cache-observer.md`}>L2 observer documentation</a> accompanying <a href="https://github.com/accel-sim/gpgpu-sim_distribution/pull/151">PR #151</a>. The diagram follows those source semantics. The callback excerpt reproduces the observer’s notification method with adjusted line breaks. The source uses the BSD 3-Clause license.</p>
+  <p><a href={withBase('licenses/gpu-observer/gpu-cache-BSD-3-Clause.txt')}>Cache-source copyright & license</a> · <a href={withBase('licenses/gpu-observer/COPYRIGHT.txt')}>Repository copyright</a> · <a href={withBase('licenses/gpu-observer/SOURCE.txt')}>Source record</a></p>
+
+  <h2>Typography & identity</h2><p>Newsreader and Manrope are self-hosted and licensed under the SIL Open Font License. The personal monogram and simple interface icons were composed locally for this website.</p><p><a href={withBase('licenses/fonts/newsreader-OFL.txt')}>Newsreader license</a> · <a href={withBase('licenses/fonts/manrope-OFL.txt')}>Manrope license</a></p>
+  </div><a class="text-link" href={withBase()}>Return to home <span aria-hidden="true">→</span></a></main><Footer />
+</BaseLayout>

@@ -1,0 +1,47 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import ChapterText from './ChapterText.astro';
+import ResearchFigure from './ResearchFigure.astro';
+import PublicationEntry from '../PublicationEntry.astro';
+import ReadObserver from './ReadObserver.astro';
+import ReadGrid from './ReadGrid.astro';
+import MeasurementWindow from './MeasurementWindow.astro';
+import { publications } from '../../data/publications';
+interface Props { project: CollectionEntry<'research'> }
+const { project } = Astro.props;
+const section = (id: string) => project.data.sections.find(s => s.id === id)!;
+const findings = section('findings');
+const figures = '/images/research/icicm/';
+---
+<div class="case-container">
+  <section class="chapter chapter-split" aria-labelledby="contribution">
+    <ChapterText section={section('contribution')} number="01" />
+    <div class="study-note"><p class="eyebrow">The question</p><p class="large-quote">Can every served read be traced to data that has already arrived?</p><p class="note-detail">A consistency check at the boundary between memory transfers and compute.</p></div>
+  </section>
+</div>
+<section class="case-dark" aria-labelledby="method">
+  <div class="case-container">
+    <div class="chapter chapter-split">
+      <ChapterText section={section('method')} number="02" />
+      <div class="read-conditions">
+        <p class="condition-intro">A transfer exists for the requested address.</p>
+        <div><span>Data ready</span><p aria-label="Transfer completion time is at most the read return time">t<sub>complete</sub> <em>≤</em> t<sub>return</sub></p></div>
+        <div><span>Minimum hit latency</span><p aria-label="Read arrival time plus hit latency is at most the read return time">t<sub>arrival</sub> + L<sub>hit</sub> <em>≤</em> t<sub>return</sub></p></div>
+      </div>
+    </div>
+    <ReadObserver />
+  </div>
+</section>
+<div class="case-container">
+  <section class="chapter results-chapter" aria-labelledby="findings">
+    <div class="chapter-split"><ChapterText section={{...findings, paragraphs: findings.paragraphs.slice(0, 1)}} number="03" /><div class="grid-summary"><p class="eyebrow">Buffer-constrained grid</p><strong>333<span> / 459</span></strong><p>configurations failed the read check.</p><div><strong>153 / 153</strong><span>large-buffer controls passed</span></div></div></div>
+    <ReadGrid />
+    <div class="boundary-heading"><p class="eyebrow">The operand-fit boundary</p><h3>Capacity, residency, and transferred addresses.</h3>{findings.paragraphs.slice(1).map(paragraph => <p>{paragraph}</p>)}</div>
+    <ResearchFigure src={figures + 'weight-stationary-case.webp'} original={figures + 'weight-stationary-case-original.png'} width={2045} height={725} label="The operand-fit boundary and an address-coverage example" alt="Boundary failures at s0 minus 1, s0 and s0 plus 1, alongside an MN conv0 weight-stationary case with 110,592 reported resident input addresses, 102,921 distinct transferred addresses and 7,671 false-hit addresses." caption="The operand-fit sweep uses a bandwidth of 4 words/cycle. The MN conv0 panels compare residency with transferred addresses and the prefetch-schedule prefix needed for coverage. Oral presentation, slide 6." mobilePanels={[
+      {src: figures + 'weight-stationary-boundary.webp', width: 950, height: 725, label: 'Operand-fit boundary sweep', alt: 'Operand-fit boundary sweep: 48 of 48 failures below the boundary, 5 of 51 at the boundary, and 4 of 51 above it.'},
+      {src: figures + 'weight-stationary-addresses.webp', width: 965, height: 710, label: 'MN conv0 · address coverage', alt: 'MN conv0, weight-stationary, 216 Kiword buffer: 110,592 reported resident input addresses versus 102,921 distinct transferred addresses; 7,671 false-hit addresses. Covering prefix: 131,052 slots; initial prefix: 110,592 slots.'}
+    ]} />
+    <MeasurementWindow />
+  </section>
+  <section class="chapter case-outcome" aria-labelledby="outcome"><ChapterText section={section('outcome')} number="04" /><PublicationEntry publication={publications[0]} /></section>
+</div>

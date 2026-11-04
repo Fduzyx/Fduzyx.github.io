@@ -1,0 +1,55 @@
+# Public repository boundary: new root files require deliberate review.
+/*
+!/.gitignore
+!/README.md
+!/astro.config.mjs
+!/tsconfig.json
+!/package.json
+!/package-lock.json
+!/src/
+!/public/
+!/scripts/
+!/.github/
+
+# Keep only the deployment workflow and maintained local utilities.
+/.github/*
+!/.github/workflows/
+/.github/workflows/*
+!/.github/workflows/deploy.yml
+/scripts/*
+!/scripts/verify-build.mjs
+!/scripts/browser-utils.mjs
+!/scripts/browser-qa.mjs
+!/scripts/base-smoke.mjs
+!/scripts/make-social.mjs
+!/scripts/capture.mjs
+!/scripts/refinement-contact-qa.mjs
+!/scripts/refinement-figures-qa.mjs
+!/scripts/integration-figures-qa.mjs
+
+# Local research inputs, review history, and handoff documents stay on disk.
+/artifacts/
+/references/
+/docs/
+**/_codex_materials/
+**/awards_private/
+**/academic_sources_private/
+**/Yixuan_Website_V1_DropIn_Resources*/
+
+# Dependencies, generated output, credentials, and editor state.
+node_modules/
+dist/
+.astro/
+.cache/
+.env
+.env.*
+*.pem
+*.key
+*.zip
+*.7z
+*.rar
+*.log
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

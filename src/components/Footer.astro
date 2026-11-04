@@ -1,0 +1,14 @@
+---
+import { profile } from '../data/profile';
+import { withBase } from '../lib/paths';
+import Icon from './Icon.astro';
+import EmailContact from './EmailContact.astro';
+const year = new Date().getUTCFullYear();
+---
+<footer class="site-footer" id="contact">
+  <div class="container">
+    <div class="contact-top"><div><p class="eyebrow">Get in touch</p><h2>Let's connect.</h2></div><EmailContact email={profile.email} placement="footer" /></div>
+    <div class="footer-links"><span>{profile.location}</span><a href={profile.github}>GitHub <span aria-hidden="true">↗</span></a><a href={withBase(profile.cv)} download>Download CV <Icon name="download" size={16} /></a></div>
+    <div class="footer-bottom"><p>© {year} {profile.name}. <span>Personal academic website.</span></p><a href={withBase('credits/')}>Visual credits</a><a href="#main-content">Back to top <span aria-hidden="true">↑</span></a></div>
+  </div>
+</footer>

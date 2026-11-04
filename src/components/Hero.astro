@@ -1,0 +1,28 @@
+---
+import Header from './Header.astro';
+import Icon from './Icon.astro';
+import EmailContact from './EmailContact.astro';
+import { withBase } from '../lib/paths';
+import { profile } from '../data/profile';
+---
+<section class="hero" id="home" aria-labelledby="hero-title">
+  <picture><source media="(max-width: 480px)" type="image/avif" srcset={withBase('images/hero/wafer-mobile.avif')} /><source media="(max-width: 480px)" type="image/webp" srcset={withBase('images/hero/wafer-mobile.webp')} /><img class="hero-image" src={withBase('images/hero/wafer.webp')} alt="" width="2172" height="724" fetchpriority="high" /></picture>
+  <div class="hero-shade"></div>
+  <Header home />
+  <div class="container hero-content">
+    <h1 id="hero-title" tabindex="-1">{profile.name} <span class="hero-slash" aria-hidden="true">/</span></h1>
+    <p class="hero-eyebrow">{profile.title.split(' · ').map((part, i) => <>{i > 0 && <span>·</span>}{part}</>)}</p>
+    <p class="hero-statement">{profile.description}</p>
+    <ul class="interest-tags" aria-label="Research interests">{profile.interests.map(interest => <li>{interest}</li>)}</ul>
+    <div class="hero-links">
+      <a href={withBase(profile.cv)} target="_blank" rel="noopener"><Icon name="document" /> CV<span class="sr-only"> (PDF, opens in a new tab)</span></a>
+      <a href={profile.github}><Icon name="github" /> GitHub</a>
+      <EmailContact email={profile.email} placement="hero" />
+    </div>
+  </div>
+</section>
+<style>
+  .hero-links { align-items: center; }
+  @media (max-width: 480px) { .hero-links { flex-wrap: wrap; } }
+  @media (max-width: 350px) { .hero { min-height: 700px; } }
+</style>

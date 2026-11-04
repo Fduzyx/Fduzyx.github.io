@@ -1,0 +1,30 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import ChapterText from './ChapterText.astro';
+import ResearchFigure from './ResearchFigure.astro';
+interface Props { project: CollectionEntry<'research'> }
+const { project } = Astro.props;
+const section = (id: string) => project.data.sections.find(s => s.id === id)!;
+const evidence = 'images/research/evidence/';
+---
+<div class="case-container">
+  <section class="chapter" aria-labelledby="contribution">
+    <div class="chapter-split"><ChapterText section={section('contribution')} number="01" /><div class="study-note"><p class="eyebrow">A connected workflow</p><ol class="workflow-list"><li><span>01</span> Token-level model</li><li><span>02</span> Parameterized RTL</li><li><span>03</span> Verification & implementation</li></ol></div></div>
+    <ResearchFigure src={`${evidence}model2gds-token-wavefront.png`} width={2167} height={905} label="Figure 01 · Token propagation" alt="2 by 2 output-stationary array with K equals 2: tokens propagate through registered neighbors and finish in five rising edges including clear." caption="A 2×2 example with K=2 completes in five counted rising edges, including clear. The diagram follows aligned tokens through registered neighbor connections." mobilePanels={[{src: `${evidence}model2gds-token-neighbors.png`, width:626, height:715, alt:'Registered neighbor links — original figure, left panel'}, {src:`${evidence}model2gds-token-timing.png`,width:1442,height:830,alt:'Aligned tokens, K=2 — original figure, right panel'}]} />
+  </section>
+  <section class="chapter model-validation" aria-labelledby="validation">
+    <div class="chapter-split"><div><ChapterText section={section('validation')} number="02" /><div class="validation-totals"><strong>441<span>/441</span></strong><p>numerical and cycle checks matched</p><p class="validation-delta">Maximum cycle difference: 0</p><span>2×2 · 4×4 · 8×8 arrays</span></div></div>
+    <ResearchFigure src={`${evidence}model2gds-cycle-agreement.png`} width={1118} height={1147} label="Figure 02 · Model / RTL agreement" alt="Log-log plot of token-model versus RTL-observed counted rising edges. All 441 executions lie on the equality line; maximum absolute difference is zero." caption="Model predictions and RTL observations lie on the equality line, with 147 executions for each array size." />
+    </div>
+    <details class="coverage-details"><summary>Explore the verification case plan <span aria-hidden="true">+</span></summary><div><p>Each array uses 13 directed cases, 128 deterministic random cases, and 6 frozen-workload sanity checks.</p><ResearchFigure src={`${evidence}model2gds-functional-coverage.png`} width={1785} height={791} label="Figure 03 · Verification coverage" alt="Each of the 2 by 2, 4 by 4 and 8 by 8 arrays runs 13 directed, 128 deterministic random and 6 frozen-workload sanity checks, totaling 147 per array." caption="The same deterministic case plan is used across the three array sizes." /></div></details>
+  </section>
+</div>
+<section class="case-dark physical-section" aria-labelledby="physical"><div class="case-container">
+  <div class="chapter chapter-split"><ChapterText section={section('physical')} number="03" /><div class="physical-context"><strong>20 <span>ns</span></strong><p>Implementation constraint</p><span>2×2 and 4×4 arrays · SKY130</span></div></div>
+  <div class="routing-pair">
+    <ResearchFigure class="routing-figure" src={`${evidence}model2gds-routing-2x2.webp`} original={`${evidence}model2gds-routing-2x2-original.png`} width={869} height={894} label="Figure 04 · 2×2 routing" alt="Real 2 by 2 array routing overview with original layer colors, a 50 micrometer scale bar, and a dashed center-detail marker." caption="2×2 top-cell routing, with a 50 µm scale bar. The dashed box marks the center-detail view included in the original figure." />
+    <ResearchFigure class="routing-figure" src={`${evidence}model2gds-routing-4x4.webp`} original={`${evidence}model2gds-routing-4x4-original.png`} width={880} height={894} label="Figure 05 · 4×4 routing" alt="Real 4 by 4 array routing overview with original layer colors, a 100 micrometer scale bar, and a dashed center-detail marker." caption="4×4 top-cell routing, with a 100 µm scale bar. The dashed box marks the center-detail view included in the original figure." />
+  </div>
+  <div class="physical-table"><table><caption>Area from the 20 ns implementation study</caption><thead><tr><th scope="col">Array</th><th scope="col">Cell area <span>µm²</span></th><th scope="col">Floorplan core area <span>µm²</span></th></tr></thead><tbody><tr><th scope="row">2×2</th><td>39,103.8</td><td>130,964</td></tr><tr><th scope="row">4×4</th><td>162,386.0</td><td>531,820</td></tr></tbody></table><p>Source: the <a href="https://github.com/sscs-ose/sscs-ose-code-a-chip.github.io/blob/b55af6eeb409208bde8538a345e77af40c1342cc/ISSCC27/submitted_notebooks/Model2GDS/supplement/physical20/metrics.json">20 ns implementation record ↗</a>. Each routing view retains its own physical scale.</p></div>
+</div></section>
+<div class="case-container"><section class="chapter chapter-split case-outcome" aria-labelledby="outcome"><ChapterText section={section('outcome')} number="04" /><a class="repository-link" href="https://github.com/sscs-ose/sscs-ose-code-a-chip.github.io/pull/205"><span class="eyebrow">ISSCC 2027 · IEEE SSCS</span><strong>Model2GDS</strong><span>Notebook, RTL, tests & implementation records</span><span class="repository-status">Contribution merged · #205 <span aria-hidden="true">↗</span></span></a></section></div>

@@ -1,0 +1,16 @@
+---
+import { publications } from '../data/publications';
+interface Props { publication: typeof publications[number] }
+const { publication: p } = Astro.props;
+---
+<article class="publication-entry">
+  <div class="publication-year"><span>{p.year}</span><span class="publication-type">Conference paper<br />& oral presentation</span></div>
+  <div class="publication-body">
+    <h3>{p.title}</h3>
+    <p class="publication-authors">{p.authors.map((author, i) => <>{i > 0 && (i === p.authors.length - 1 ? ', and ' : ', ')}{i === 0 ? <strong>{author}</strong> : author}</>)}</p>
+    <p class="publication-venue">{p.conference} ({p.acronym})<br />{p.location}</p>
+    <div class="publication-status"><span>{p.status}</span><span><time datetime={p.presentationDate}>{p.presentation}</time></span></div>
+    <p class="publication-award"><span aria-hidden="true">◇</span> {p.award}</p>
+    <ul class="publication-links">{p.links.map(link => <li><a href={link.url}>{link.title} <span aria-hidden="true">↗</span></a></li>)}</ul>
+  </div>
+</article>

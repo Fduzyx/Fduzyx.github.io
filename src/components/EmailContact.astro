@@ -1,0 +1,123 @@
+---
+import Icon from './Icon.astro';
+interface Props { email: string; placement?: 'hero' | 'footer' }
+const { email, placement = 'hero' } = Astro.props;
+const inputId = `email-address-${placement}`;
+---
+<div class:list={['email-contact', `email-contact--${placement}`]} data-email-contact data-email={email} role="group" aria-label="Email contact">
+  {placement === 'footer' && <span class="email-address">{email}</span>}
+  <div class="email-actions">
+    <a class="email-write" href={`mailto:${email}`} title="Open your email app"><Icon name="mail" size={20} /><span>Write email</span></a>
+    <button class="email-copy" type="button" data-copy-email title={`Copy ${email}`} disabled>
+      <svg class="copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="13" rx="2" /><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3" /></svg>
+      <svg class="copied-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6" /></svg>
+      <span data-copy-label>Copy email</span>
+    </button>
+  </div>
+  <span class="sr-only" data-email-status role="status" aria-live="polite" aria-atomic="true"></span>
+  <div class="email-fallback" data-email-fallback hidden>
+    <button class="email-dismiss" type="button" data-dismiss-email aria-label="Close copy help"><span aria-hidden="true">×</span></button>
+    <label for={inputId}>Copy email manually</label>
+    <input id={inputId} type="text" value={email} readonly spellcheck="false" aria-describedby={`${inputId}-help`} />
+    <p id={`${inputId}-help`}>Select the address and copy it. On a touch screen, press and hold.</p>
+  </div>
+  <noscript><p class="email-no-script">Copy this address: <span>{email}</span></p></noscript>
+</div>
+<style>
+  .email-contact { position: relative; min-width: 0; }
+  .email-contact--hero { padding-left: 28px; }
+  .email-contact--hero::before { content: ''; position: absolute; left: 0; top: 9px; height: 20px; width: 1px; background: #bfc4cb30; }
+  .email-actions { display: flex; align-items: center; gap: 20px; }
+  .email-contact .email-write { display: inline-flex; align-items: center; gap: 12px; padding: 0; min-height: 40px; white-space: nowrap; font: 17px/1.4 var(--serif); }
+  .email-write:hover { color: #e5bd7d; }
+  .email-copy { min-width: 117px; min-height: 36px; padding: 7px 11px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 1px solid #c7cdd642; border-radius: 4px; background: #0a151f66; color: #e3e7e9; font: 11px/1.5 var(--sans); cursor: pointer; transition: border-color .18s, color .18s, background .18s; }
+  .email-copy:hover { border-color: #be985cb3; color: #f2cd95; background: #14232c; }
+  .email-copy[disabled] { cursor: default; }
+  .email-copy svg { width: 16px; height: 16px; flex-shrink: 0; }
+  .email-copy[data-copied='true'] { color: #ebc68f; border-color: #be985c75; }
+  .copied-icon { display: none; }
+  .email-copy[data-copied='true'] .copy-icon { display: none; }
+  .email-copy[data-copied='true'] .copied-icon { display: block; }
+  .email-address { display: block; color: #f3f1ed; font: 34px/1.3 var(--serif); overflow-wrap: anywhere; user-select: text; }
+  .email-contact--footer .email-actions { justify-content: flex-end; margin-top: 12px; gap: 22px; }
+  .email-contact--footer .email-write { font: 12px/1.5 var(--sans); gap: 9px; }
+  .email-contact--footer .email-write :global(svg) { width: 17px; height: 17px; }
+  .email-fallback { position: absolute; z-index: 8; left: 0; bottom: calc(100% + 12px); width: 320px; max-width: calc(100vw - 40px); padding: 17px 18px 15px; color: #f3f1ed; background: #12212c; border: 1px solid #b8a38275; border-radius: 6px; box-shadow: 0 12px 28px #0005; font-family: var(--sans); }
+  .email-contact--footer .email-fallback { left: auto; right: 0; }
+  .email-fallback label { display: block; font-size: 12px; font-weight: 600; padding-right: 24px; }
+  .email-fallback input { display: block; width: 100%; min-width: 0; margin-top: 12px; padding: 9px 8px; color: #f7f4ee; background: #09141d; border: 1px solid #b7c0c34a; border-radius: 3px; font: 12px/1.5 var(--sans); user-select: all; }
+  .email-fallback p { margin-top: 9px; font-size: 11px; line-height: 1.6; color: #c3ccd1; }
+  .email-dismiss { position: absolute; right: 4px; top: 4px; width: 36px; height: 36px; padding: 0; border: 0; background: transparent; color: #c3ccd1; cursor: pointer; font: 24px/1 var(--serif); }
+  .email-dismiss:hover { color: #e5bd7d; }
+  .email-no-script { max-width: 290px; margin-top: 9px; font: 12px/1.6 var(--sans); }
+  .email-no-script span { user-select: all; }
+  @media (max-width: 900px) { .email-address { font-size: 27px; } }
+  @media (max-width: 760px) {
+    .email-contact--hero { padding-left: 19px; }
+    .email-actions { gap: 14px; }
+    .email-contact .email-write { font-size: 16px; gap: 10px; min-height: 44px; }
+    .email-copy { min-height: 44px; }
+    .email-address { font-size: clamp(23px, 6.4vw, 30px); }
+    .email-contact--footer { margin-top: 25px; }
+    .email-contact--footer .email-actions { justify-content: flex-start; margin-top: 10px; gap: 22px; }
+    .email-contact--footer .email-write { font: 12px/1.5 var(--sans); }
+    .email-contact--footer .email-fallback { left: 0; right: auto; }
+  }
+  @media (max-width: 480px) {
+    .email-contact--hero { flex-basis: 100%; padding-left: 2px; margin-top: 6px; }
+    .email-contact--hero::before { display: none; }
+    .email-contact--hero .email-actions { gap: 22px; }
+    .email-fallback { width: 300px; }
+  }
+</style>
+<script>
+  document.querySelectorAll<HTMLElement>('[data-email-contact]').forEach(contact => {
+    const copy = contact.querySelector<HTMLButtonElement>('[data-copy-email]');
+    const label = contact.querySelector<HTMLElement>('[data-copy-label]');
+    const status = contact.querySelector<HTMLElement>('[data-email-status]');
+    const fallback = contact.querySelector<HTMLElement>('[data-email-fallback]');
+    const input = fallback?.querySelector<HTMLInputElement>('input');
+    const email = contact.dataset.email;
+    if (!copy || !label || !status || !fallback || !input || !email) return;
+    let resetTimer: ReturnType<typeof setTimeout>;
+    let copying = false;
+    const closeFallback = (restoreFocus = false) => {
+      fallback.hidden = true;
+      if (restoreFocus) copy.focus();
+    };
+    copy.disabled = false;
+    copy.addEventListener('click', async () => {
+      if (copying) return;
+      copying = true;
+      clearTimeout(resetTimer);
+      status.textContent = '';
+      copy.setAttribute('aria-busy', 'true');
+      try {
+        if (!navigator.clipboard?.writeText) throw new Error('Clipboard unavailable');
+        await navigator.clipboard.writeText(email);
+        closeFallback();
+        label.textContent = 'Copied';
+        copy.dataset.copied = 'true';
+        status.textContent = 'Email copied to clipboard.';
+        resetTimer = setTimeout(() => { label.textContent = 'Copy email'; delete copy.dataset.copied; }, 5000);
+      } catch {
+        label.textContent = 'Copy email';
+        delete copy.dataset.copied;
+        fallback.hidden = false;
+        status.textContent = 'Automatic copying is unavailable. Select the email address and copy it manually.';
+        input.focus({ preventScroll: true });
+        input.select();
+      } finally {
+        copying = false;
+        copy.removeAttribute('aria-busy');
+      }
+    });
+    contact.querySelector('[data-dismiss-email]')?.addEventListener('click', () => closeFallback(true));
+    contact.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && !fallback.hidden) { event.preventDefault(); closeFallback(true); }
+    });
+    document.addEventListener('click', event => {
+      if (event.target instanceof Node && !contact.contains(event.target)) closeFallback();
+    });
+  });
+</script>

@@ -1,0 +1,18 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { withBase } from '../lib/paths';
+import Icon from './Icon.astro';
+interface Props { project: CollectionEntry<'research'> }
+const { project } = Astro.props;
+const p = project.data;
+---
+<a class={`research-card research-card--${project.id}`} href={withBase(`research/${project.id}/`)}>
+  <img src={withBase(p.image)} alt="" width="960" height="540" loading="lazy" fetchpriority="low" decoding="async" />
+  <div class="card-shade"></div>
+  <div class="card-content">
+    <div class="card-number">{String(p.order).padStart(2, '0')} <span></span></div>
+    <h3>{p.cardTitle}</h3>
+    <p>{p.description}</p>
+    <div class="card-bottom"><ul aria-label="Topics">{p.tags.slice(0, 3).map(tag => <li>{tag}</li>)}</ul><Icon name="arrow" size={21} /></div>
+  </div>
+</a>

@@ -1,0 +1,55 @@
+<dialog class="figure-viewer" aria-labelledby="figure-viewer-title">
+  <div class="viewer-toolbar"><p id="figure-viewer-title"></p><button type="button" data-viewer-zoom aria-pressed="false">Zoom in</button><button type="button" data-viewer-close aria-label="Close figure">×</button></div>
+  <div class="viewer-canvas" tabindex="0" role="region" aria-label="Figure image. Scroll to explore when zoomed."><img alt="" /></div>
+  <p class="viewer-help">Use Zoom in to inspect labels and details. Scroll or swipe to move around the image.</p>
+</dialog>
+<style>
+  .figure-viewer { width: min(1200px, calc(100% - 32px)); max-width: none; max-height: calc(100dvh - 32px); padding: 18px; border: 1px solid #6c777c; background: #0a151f; color: #f3f1ed; box-shadow: 0 20px 80px #0007; }
+  .figure-viewer::backdrop { background: #02080fe6; }
+  .viewer-toolbar { display: flex; gap: 18px; align-items: center; margin-bottom: 15px; }
+  .viewer-toolbar p { margin-right: auto; font: 17px/1.4 var(--serif); }
+  .viewer-toolbar button { cursor: pointer; border: 1px solid #a6afb55e; background: transparent; color: inherit; min-height: 44px; padding: 6px 14px; font: 12px var(--sans); white-space: nowrap; }
+  .viewer-toolbar button:hover { border-color: #be985c; color: #e5c58f; }
+  .viewer-toolbar [data-viewer-close] { font: 27px var(--serif); padding: 0; width: 44px; flex-shrink: 0; }
+  .viewer-canvas { overflow: auto; max-height: calc(100dvh - 180px); background: #182630; overscroll-behavior: contain; }
+  .viewer-canvas img { max-width: 100%; max-height: calc(100dvh - 180px); width: auto; height: auto; margin-inline: auto; }
+  .viewer-canvas.is-zoomed img { max-width: none; max-height: none; margin: 0; }
+  .viewer-help { font: 12px/1.7 var(--sans); color: #c0ccd3; margin-top: 12px; }
+  @media(max-width:600px) { .figure-viewer { width: calc(100% - 16px); padding: 12px; } .viewer-toolbar { gap: 10px; flex-wrap: wrap; } .viewer-toolbar p { flex-basis: calc(100% - 65px); } .viewer-toolbar [data-viewer-close] { order: -1; margin-left: auto; } .viewer-toolbar p { order: -2; } .viewer-canvas, .viewer-canvas img { max-height: calc(100dvh - 245px); } .viewer-toolbar button { font-size: 12px; } }
+</style>
+<script>
+  const viewer = document.querySelector<HTMLDialogElement>('.figure-viewer');
+  const canvas = viewer?.querySelector<HTMLElement>('.viewer-canvas');
+  const figure = viewer?.querySelector<HTMLImageElement>('.viewer-canvas img');
+  const title = viewer?.querySelector<HTMLElement>('#figure-viewer-title');
+  const zoom = viewer?.querySelector<HTMLButtonElement>('[data-viewer-zoom]');
+  let trigger: HTMLAnchorElement | null = null;
+  if (viewer && canvas && figure && title && zoom) {
+    document.querySelectorAll<HTMLAnchorElement>('[data-figure-zoom]').forEach(link => {
+      link.addEventListener('click', event => {
+        if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+        event.preventDefault();
+        trigger = link;
+        title.textContent = link.dataset.figureLabel || 'Research figure';
+        figure.alt = link.querySelector('img')?.alt || title.textContent;
+        figure.src = link.href;
+        canvas.classList.remove('is-zoomed');
+        zoom.setAttribute('aria-pressed', 'false');
+        zoom.textContent = 'Zoom in';
+        viewer.showModal();
+      });
+    });
+    zoom.addEventListener('click', () => {
+      const expanded = canvas.classList.toggle('is-zoomed');
+      zoom.setAttribute('aria-pressed', String(expanded));
+      zoom.textContent = expanded ? 'Fit image' : 'Zoom in';
+      canvas.scrollTo(0, 0);
+    });
+    viewer.querySelector('[data-viewer-close]')?.addEventListener('click', () => viewer.close());
+    viewer.addEventListener('close', () => trigger?.focus({ preventScroll: true }));
+    viewer.addEventListener('click', event => {
+      const r = viewer.getBoundingClientRect();
+      if (event.target === viewer && (event.clientX < r.left || event.clientX > r.right || event.clientY < r.top || event.clientY > r.bottom)) viewer.close();
+    });
+  }
+</script>

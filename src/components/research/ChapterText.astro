@@ -1,0 +1,9 @@
+---
+interface Props { section: { id: string; title: string; paragraphs: string[] }; number: string }
+const { section, number } = Astro.props;
+---
+<div class="chapter-copy">
+  <p class="eyebrow chapter-number">{number} <span aria-hidden="true">/</span> {section.id}</p>
+  <h2 id={section.id}>{section.title}</h2>
+  {section.paragraphs.map(paragraph => <p>{paragraph}</p>)}
+</div>

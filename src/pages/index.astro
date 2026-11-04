@@ -1,0 +1,57 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import ResearchCard from '../components/ResearchCard.astro';
+import PublicationEntry from '../components/PublicationEntry.astro';
+import Footer from '../components/Footer.astro';
+import Icon from '../components/Icon.astro';
+import AIPractice from '../components/AIPractice.astro';
+import { publications } from '../data/publications';
+import { profile } from '../data/profile';
+import { honors } from '../data/honors';
+import { withBase } from '../lib/paths';
+const projects = (await getCollection('research')).sort((a, b) => a.data.order - b.data.order);
+const [degreeType, degreeSubject] = profile.education.degree.split(' · ');
+---
+<BaseLayout skipTarget="hero-title">
+  <main id="main-content">
+    <Hero />
+    <section id="research" class="research-section" aria-labelledby="research-title">
+      <div class="container">
+        <div class="section-heading"><h2 id="research-title">Featured Research</h2><span class="heading-rule"></span><span class="section-aside">Selected work</span></div>
+        <div class="research-grid">{projects.map(project => <ResearchCard project={project} />)}</div>
+        <dl class="research-highlights" aria-label="Selected research results"><div><dt>13 / 17</dt><dd>layer shapes with a different set of fastest dataflows across measurement windows</dd></div><div><dt>61,275</dt><dd>accepted L2 accesses<br />matched by status</dd></div><div><dt>441 / 441</dt><dd>model / RTL tests matched<br />with zero cycle difference</dd></div></dl>
+      </div>
+    </section>
+    <section id="publications" class="publication-section" aria-labelledby="publication-title">
+      <div class="container">
+        <div class="editorial-section-heading"><p class="eyebrow">Selected publication</p><h2 id="publication-title">Conference Paper & Presentation</h2></div>
+        {publications.map(publication => <PublicationEntry publication={publication} />)}
+        <figure class="conference-photo">
+          <img src={withBase('images/conference/icicm-2026.webp')} width="1600" height="901" alt="Yixuan Zhuang in conversation at ICICM 2026 in Xi'an, China." loading="lazy" decoding="async" />
+          <figcaption><span>In conversation at ICICM 2026, Xi'an, China.</span><a href={withBase('research/accelerator/')}>Explore the study <Icon name="arrow" size={18} /></a></figcaption>
+        </figure>
+      </div>
+    </section>
+    <section class="honors-section" aria-labelledby="honors-title">
+      <div class="container honors-layout">
+        <div class="editorial-section-heading"><p class="eyebrow">Recognition</p><h2 id="honors-title">Selected honors</h2></div>
+        <ol class="honors-list">{honors.map(honor => <li><span class="honor-year">{honor.year}</span><div><h3>{honor.url ? <a href={honor.url}>{honor.title}<span aria-hidden="true"> ↗</span></a> : honor.title}</h3><p>{honor.context}</p></div></li>)}</ol>
+      </div>
+    </section>
+    <section id="about" class="about-section" aria-labelledby="about-title">
+      <div class="container about-grid">
+        <div class="about-copy">
+          <p class="eyebrow">About me</p>
+          <h2 id="about-title">Research &<br />background.</h2>
+          {profile.aboutParagraphs.map(paragraph => <p>{paragraph}</p>)}
+          <a class="text-link" href={withBase(profile.cv)} target="_blank" rel="noopener">Read my full CV <Icon name="arrow" size={20} /><span class="sr-only"> (PDF, opens in a new tab)</span></a>
+          <AIPractice />
+        </div>
+        <aside class="education" aria-labelledby="education-title"><p class="eyebrow" id="education-title">Education</p><h3>{profile.education.institution}</h3><p class="education-degree">{degreeSubject}</p><p class="education-program">{profile.education.program} · {degreeType}</p><p class="education-college">{profile.education.college}</p><p class="education-date">{profile.education.period}</p><span class="education-location">{profile.location}</span></aside>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</BaseLayout>

@@ -1,0 +1,19 @@
+---
+import { withBase } from '../../lib/paths';
+const hooks = ['Prefetch', 'Refill', 'Hit query', 'Service'];
+---
+<figure class="read-observer" aria-labelledby="observer-caption">
+  <ul class="observer-hooks" aria-label="Observed simulator calls">
+    {hooks.map(hook => <li><span>{hook}</span></li>)}
+  </ul>
+  <div class="observer-record">
+    <p class="eyebrow">Address-level observer</p>
+    <div class="observer-evidence">
+      <div><h3>Record each transfer.</h3><p>Keep the earliest transfer completion time for each address.</p></div>
+      <div><h3>Check each read.</h3><p>Test address coverage and timing; record the first violating service.</p></div>
+    </div>
+  </div>
+  <figcaption id="observer-caption">Four observation points connect each read to its supporting transfer. The wrappers preserve the simulator’s arguments, return values, and timing.
+    <a class="figure-open" href={withBase('images/research/icicm/observer-method-original.png')} target="_blank" rel="noopener">Original method diagram · slide 4 <span aria-hidden="true">↗</span></a>
+  </figcaption>
+</figure>

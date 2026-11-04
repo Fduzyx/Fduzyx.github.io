@@ -1,0 +1,23 @@
+---
+import { windowComparison, windowStudy } from '../../data/accelerator';
+import { withBase } from '../../lib/paths';
+const cycles = (value: number) => value.toLocaleString('en-US');
+---
+<section class="window-study" aria-labelledby="window-title">
+  <div class="window-story">
+    <p class="eyebrow">From trace consistency to design choice</p>
+    <h3 id="window-title">{windowStudy.title}</h3>
+    <p>{windowStudy.summary}</p>
+    <p class="window-conditions">8×8 array · 512 Ki words per operand · 4 words/cycle</p>
+  </div>
+  <div class="window-comparison">
+    <table>
+      <caption>{windowStudy.layer} · cycles by measurement window</caption>
+      <thead><tr><th scope="col">Window</th><th scope="col"><abbr title="Weight-stationary">WS</abbr></th><th scope="col"><abbr title="Output-stationary">OS</abbr></th></tr></thead>
+      <tbody>{windowComparison.map(row => <tr><th scope="row">{row.label}</th><td class:list={{'winning-value': row.bestDataflow === 'WS'}}>{cycles(row.wsCycles)}{row.bestDataflow === 'WS' && <span>lower</span>}</td><td class:list={{'winning-value': row.bestDataflow === 'OS'}}>{cycles(row.osCycles)}{row.bestDataflow === 'OS' && <span>lower</span>}</td></tr>)}</tbody>
+    </table>
+    <dl class="window-definitions">{windowComparison.map(row => <div><dt>{row.label}</dt><dd>{row.definition}</dd></div>)}</dl>
+    <p class="window-legend">WS: weight-stationary. OS: output-stationary.</p>
+    <a class="figure-open" href={withBase('images/research/icicm/measurement-window-original.png')} target="_blank" rel="noopener">Original comparison · slide 7 <span aria-hidden="true">↗</span></a>
+  </div>
+</section>

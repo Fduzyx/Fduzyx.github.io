@@ -1,0 +1,15 @@
+:root {
+  --navy: #0a151f;
+  --navy-soft: #13222d;
+  --paper: #f3f1ed;
+  --paper-light: #f9f8f5;
+  --ink: #17232b;
+  --muted: #5c666b;
+  --gold: #be985c;
+  --gold-dark: #82602e;
+  --line: #d7d3ca;
+  --serif: 'Newsreader Variable', Georgia, 'Times New Roman', serif;
+  --sans: 'Manrope Variable', Arial, sans-serif;
+  --content-width: 1432px;
+  --radius: 10px;
+}

@@ -1,0 +1,48 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import Icon from '../../components/Icon.astro';
+import AcceleratorStudy from '../../components/research/AcceleratorStudy.astro';
+import GpuStudy from '../../components/research/GpuStudy.astro';
+import ModelStudy from '../../components/research/ModelStudy.astro';
+import FigureViewer from '../../components/research/FigureViewer.astro';
+import '../../styles/case-study.css';
+import { withBase } from '../../lib/paths';
+export async function getStaticPaths() {
+  return (await getCollection('research')).map(project => ({ params: { slug: project.id }, props: { project } }));
+}
+const { project } = Astro.props;
+const p = project.data;
+const { Content } = await render(project);
+const others = (await getCollection('research')).filter(item => item.id !== project.id).sort((a, b) => a.data.order - b.data.order);
+const resources = p.resources.filter(resource => project.id === 'accelerator' ? !/^https:\/\/krz\.engineer\/(news|publications)\//.test(resource.url) : !resource.url.includes('/pull/'));
+---
+<BaseLayout title={`${p.title} — Yixuan Zhuang`} description={p.description}>
+  <Header />
+  <main id="main-content" class:list={['case-study', `case-${project.id}`]}>
+    <section class="case-hero">
+      <div class="case-container">
+        <a class="back-link" href={`${withBase()}#research`}><Icon name="back" size={18} /> All research</a>
+        <div class="case-hero-grid">
+          <div class="case-hero-copy"><p class="eyebrow"><span class="case-sequence">Research {String(p.order).padStart(2, '0')}</span><span aria-hidden="true">/</span><span>{p.year}</span></p><h1>{p.heroTitle}</h1><p class="case-project-name">{p.title}</p></div>
+          <div class="case-hero-visual">
+            {project.id === 'accelerator' && <div class="hero-measure"><span class="measure-label">Two measurement windows</span><strong>13<span class="measure-denominator"> / 17</span></strong><span class="measure-unit">layer shapes with a different<br />set of fastest dataflows.</span></div>}
+            {project.id === 'gpu-simulation' && <div class="hero-measure"><span class="measure-label">GPU memory-system simulation</span><strong>61,275</strong><span class="measure-unit">accepted L2 accesses{' '}<br />matched by status.</span></div>}
+            {project.id === 'model2gds' && <figure class="hero-routing"><img src={withBase('images/research/evidence/model2gds-routing-4x4.webp')} width="880" height="894" alt="Actual Model2GDS 4 by 4 routed array, with original routing colors and physical scale." fetchpriority="high" /><figcaption>4×4 routed array · 20 ns study</figcaption></figure>}
+          </div>
+        </div>
+        <dl class="case-facts"><div><dt>Context</dt><dd>{p.category}</dd></div><div><dt>Contribution</dt><dd>{p.role}</dd></div><div><dt>Focus</dt><dd>{p.tags.join(' · ')}</dd></div></dl>
+      </div>
+    </section>
+    <div class="case-container case-opening"><p class="eyebrow">Overview</p><div class="case-overview"><Content /></div><nav class="case-contents" aria-label="On this project page">{p.sections.map((s, i) => <a href={`#${s.id}`}><span>{String(i + 1).padStart(2, '0')}</span>{s.id}</a>)}</nav></div>
+    {project.id === 'accelerator' && <AcceleratorStudy project={project} />}
+    {project.id === 'gpu-simulation' && <GpuStudy project={project} />}
+    {project.id === 'model2gds' && <ModelStudy project={project} />}
+    {resources.length > 0 && <section class="case-container case-resources" aria-labelledby="resources-title"><h2 id="resources-title">Further reading</h2><ul>{resources.map(resource => <li><a href={resource.url}>{resource.title}<span aria-hidden="true">↗</span></a></li>)}</ul></section>}
+    <nav class="case-container more-research" aria-label="More research"><p class="eyebrow">Continue exploring</p><div>{others.map(other => <a href={withBase(`research/${other.id}/`)}><span>{String(other.data.order).padStart(2, '0')}</span><h2>{other.data.cardTitle}</h2><Icon name="arrow" size={22} /></a>)}</div></nav>
+  </main>
+  <Footer />
+  {project.id !== 'gpu-simulation' && <FigureViewer />}
+</BaseLayout>

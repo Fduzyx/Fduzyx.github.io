@@ -1,0 +1,59 @@
+---
+import { withBase } from '../lib/paths';
+import Icon from './Icon.astro';
+import { profile } from '../data/profile';
+interface Props { home?: boolean }
+const { home = false } = Astro.props;
+const isResearch = Astro.url.pathname.includes('/research/');
+const items = [['Home', 'home'], ['Research', 'research'], ['Publications', 'publications'], ['About', 'about']];
+---
+<header class:list={['site-header', { 'site-header--home': home }]}>
+  <div class="container header-inner">
+    <a class="wordmark" href={withBase()} aria-label={`YZ. — ${profile.name} — home`}><span aria-hidden="true">YZ<span class="wordmark-dot">.</span></span></a>
+    <button class="menu-toggle" aria-expanded="false" aria-controls="primary-navigation" aria-label="Open navigation"><span></span><span></span><span class="sr-only">Menu</span></button>
+    <nav id="primary-navigation" aria-label="Main navigation">
+      {items.map(([label, id]) => <a href={home ? `#${id}` : `${withBase()}#${id}`} class:list={['nav-link', { active: home ? id === 'home' : isResearch && id === 'research' }]} aria-current={home && id === 'home' ? 'location' : undefined}>{label}</a>)}
+      <a class="nav-cv" href={withBase(profile.cv)} target="_blank" rel="noopener">CV <Icon name="download" size={17} /><span class="sr-only"> (PDF, opens in a new tab)</span></a>
+    </nav>
+  </div>
+</header>
+<style>
+  .wordmark { display: inline-flex; align-items: center; min-width: 54px; min-height: 44px; font-size: 33px; font-weight: 400; line-height: 1; letter-spacing: -1.8px; }
+  .wordmark-dot { display: inline-block; margin-left: 2px; color: #d4aa69; }
+  .wordmark:hover .wordmark-dot { color: #f2cf98; }
+  @media (max-width: 760px) { .wordmark { font-size: 31px; } }
+</style>
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('.menu-toggle');
+  const nav = document.querySelector<HTMLElement>('#primary-navigation');
+  function closeMenu(restore = false) {
+    toggle?.setAttribute('aria-expanded', 'false');
+    toggle?.setAttribute('aria-label', 'Open navigation');
+    nav?.classList.remove('is-open');
+    if (restore) toggle?.focus();
+  }
+  toggle?.addEventListener('click', () => {
+    const open = toggle.getAttribute('aria-expanded') !== 'true';
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation');
+    nav?.classList.toggle('is-open', open);
+  });
+  document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && toggle?.getAttribute('aria-expanded') === 'true') closeMenu(true); });
+  document.addEventListener('click', (event) => { if (!(event.target instanceof Element) || event.target.closest('.site-header')) return; closeMenu(); });
+  nav?.querySelectorAll('a').forEach(link => link.addEventListener('click', () => closeMenu()));
+  nav?.addEventListener('focusout', (event) => { if (event.relatedTarget instanceof Node && !nav.contains(event.relatedTarget) && event.relatedTarget !== toggle) closeMenu(); });
+  matchMedia('(min-width: 761px)').addEventListener('change', () => closeMenu());
+  const sections = document.querySelectorAll<HTMLElement>('main > section[id]');
+  if (sections.length && 'IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(entries => {
+      const visible = entries.find(entry => entry.isIntersecting);
+      if (!visible) return;
+      nav?.querySelectorAll('.nav-link').forEach(link => {
+        const active = link.getAttribute('href') === `#${visible.target.id}`;
+        link.classList.toggle('active', active);
+        if (active) link.setAttribute('aria-current', 'location'); else link.removeAttribute('aria-current');
+      });
+    }, { rootMargin: '-10% 0px -65% 0px' });
+    sections.forEach(section => observer.observe(section));
+  }
+</script>
